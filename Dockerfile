@@ -5,7 +5,6 @@ WORKDIR /app
 ARG bin_name="toolbox-web"
 COPY . .
 ENV SQLX_OFFLINE true
-ENV APP_NAME ${bin_name}
 # cacheはbuild kitが勝手に削除する
 # herokuだとbuild kitが使えない模様
 # RUN --mount=type=cache,target=/usr/local/cargo/registry \
