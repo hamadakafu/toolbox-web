@@ -27,3 +27,7 @@ delete-text UUID="6feec6efe26b41b5bbedb8b2731ebc47":
 
 delete-text-old:
   curl -v -u username:password -X DELETE localhost:8080/texts/old
+
+# CIでquery!マクロが静的に解決出来るようにsqlx-data.jsonを作る．
+sqlx-prepare:
+  cargo sqlx prepare

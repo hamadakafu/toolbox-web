@@ -1,9 +1,11 @@
 use std::env;
+use std::path::Path;
 
 use actix_web::{dev::ServiceRequest, App, HttpServer};
 use actix_web_httpauth::extractors::basic::BasicAuth;
 use actix_web_httpauth::middleware::HttpAuthentication;
 use dotenv::dotenv;
+use sqlx::migrate::Migrator;
 
 mod handlers;
 use handlers::text_handler::*;
@@ -14,6 +16,9 @@ async fn main() -> anyhow::Result<()> {
     let port = env::var("PORT")?;
     let database_url = env::var("DATABASE_URL")?;
     let db_pool = sqlx::postgres::PgPool::connect(&database_url).await?;
+
+    let m = Migrator::new(Path::new("./migrations")).await?;
+    m.run(&db_pool).await?;
 
     HttpServer::new(move || {
         let basicauth = HttpAuthentication::basic(validator);

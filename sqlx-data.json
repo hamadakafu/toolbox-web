@@ -1,0 +1,79 @@
+{
+  "db": "PostgreSQL",
+  "0401fa58ba2caff394a47e647d774140a391ff8a5fca94c3413f822f1e0cc347": {
+    "query": "select value from texts order by created_at desc",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "value",
+          "type_info": "Varchar"
+        }
+      ],
+      "parameters": {
+        "Left": []
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "6b84dc231f00c0b2ef1128f3f297ffb307a981d61109a973b18d949c34f1aa30": {
+    "query": "insert into texts (uuid, value, created_at) values ($1 , $2, $3)",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Varchar",
+          "Varchar",
+          "Varchar"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "8d85137a9ccec7ffb7157c5fa6d1e68dee863d39470a2cd6a79cf41d501cce41": {
+    "query": "delete from texts where uuid = $1",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "b83a8d083abf55666acac098dc98255229bfb58f6df4aa4ae75dddd52cfd11c1": {
+    "query": "select value from texts where uuid = $1",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "value",
+          "type_info": "Varchar"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "db9e6e631030949bd92cc7e713f65d8d555295f1c6845d6e13d84d6defa80b0e": {
+    "query": "delete from texts where created_at < $1",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": []
+    }
+  }
+}
