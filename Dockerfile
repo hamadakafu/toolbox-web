@@ -14,5 +14,5 @@ ENV APP_NAME ${bin_name}
 #   cp /app/target/release/${bin_name} /app/${bin_name}
 
 RUN cargo build --release && \
-  cp /app/target/release/${bin_name} /app/${bin_name}
-ENTRYPOINT ["/app/${APP_NAME}"]
+  cp /app/target/release/${bin_name} /app/main
+ENTRYPOINT ["/app/main"]
