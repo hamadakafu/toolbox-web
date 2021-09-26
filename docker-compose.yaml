@@ -7,5 +7,5 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: hello_phx_dev
+      POSTGRES_DB: toolbox
 
