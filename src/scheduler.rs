@@ -22,7 +22,7 @@ impl Actor for Scheduler {
 impl Scheduler {
     fn schedule_task(&self, ctx: &mut Context<Self>) {
         if let Err(e) = reqwest::blocking::Client::new()
-            .get(format!("{}/hello", env::var("SERVICE_URL").unwrap()))
+            .delete(format!("{}/texts/old", env::var("SERVICE_URL").unwrap()))
             .basic_auth(
                 env::var("BASIC_AUTH_USERNAME").unwrap(),
                 Some(env::var("BASIC_AUTH_PASSWORD").unwrap()),
