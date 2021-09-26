@@ -1,6 +1,7 @@
 use std::env;
 use std::path::Path;
 
+use actix::Actor;
 use actix_web::{dev::ServiceRequest, App, HttpServer};
 use actix_web_httpauth::extractors::basic::BasicAuth;
 use actix_web_httpauth::middleware::HttpAuthentication;
@@ -8,7 +9,9 @@ use dotenv::dotenv;
 use sqlx::migrate::Migrator;
 
 mod handlers;
+mod scheduler;
 use handlers::text_handler::*;
+use scheduler::Scheduler;
 
 #[actix_web::main]
 async fn main() -> anyhow::Result<()> {
@@ -19,6 +22,8 @@ async fn main() -> anyhow::Result<()> {
 
     let m = Migrator::new(Path::new("./migrations")).await?;
     m.run(&db_pool).await?;
+
+    Scheduler.start();
 
     HttpServer::new(move || {
         let basicauth = HttpAuthentication::basic(validator);

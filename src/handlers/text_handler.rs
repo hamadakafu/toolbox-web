@@ -27,6 +27,7 @@ struct GetTextRes {
 
 #[get("/hello")]
 async fn hello() -> impl Responder {
+    println!("hello");
     HttpResponse::Ok().body("hello")
 }
 
