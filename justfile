@@ -1,3 +1,6 @@
+deploy:
+  git push heroku master
+
 sqlx-database-create:
   sqlx database create
 
