@@ -3,7 +3,7 @@ use actix_web::{
     web::{self, Data},
     HttpResponse, Responder,
 };
-use chrono::{DateTime, Duration};
+use chrono::Duration;
 use serde::{Deserialize, Serialize};
 use sqlx::{Executor, Pool, Postgres, Row};
 
@@ -16,7 +16,7 @@ struct Text {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-struct CreateTextReq {
+pub struct CreateTextReq {
     value: String,
 }
 
@@ -25,18 +25,17 @@ struct GetTextRes {
     value: String,
 }
 
-#[get("/hello")]
-async fn hello() -> impl Responder {
+pub async fn hello() -> impl Responder {
     println!("hello");
     HttpResponse::Ok().body("hello")
 }
 
-#[get("/texts/{id}")]
-async fn get_text(
+pub async fn get_text(
     pool: Data<Pool<Postgres>>,
-    web::Path(id): web::Path<String>,
+    path: web::Path<String>,
 ) -> actix_web::Result<HttpResponse> {
-    let d = if &id == "latest" {
+    let id = &path.into_inner();
+    let d = if id == "latest" {
         pool.fetch_one(sqlx::query!(
             "select value from texts order by created_at desc",
         ))
@@ -51,9 +50,11 @@ async fn get_text(
     Ok(HttpResponse::Ok().json(GetTextRes { value }))
 }
 
-#[post("/texts")]
-async fn create_text(pool: Data<Pool<Postgres>>, json: web::Json<CreateTextReq>) -> impl Responder {
-    let uuid = uuid::Uuid::new_v4().to_simple().to_string();
+pub async fn create_text(
+    pool: Data<Pool<Postgres>>,
+    json: web::Json<CreateTextReq>,
+) -> impl Responder {
+    let uuid = uuid::Uuid::new_v4().to_string();
     pool.execute(sqlx::query!(
         r#"insert into texts (uuid, value, created_at) values ($1 , $2, $3)"#,
         uuid,
@@ -65,12 +66,9 @@ async fn create_text(pool: Data<Pool<Postgres>>, json: web::Json<CreateTextReq>)
     HttpResponse::Ok().body("ok")
 }
 
-#[delete("/texts/{id}")]
-async fn delete_text(
-    pool: Data<Pool<Postgres>>,
-    web::Path(id): web::Path<String>,
-) -> impl Responder {
-    if &id == "old" {
+pub async fn delete_text(pool: Data<Pool<Postgres>>, path: web::Path<String>) -> impl Responder {
+    let id = &path.into_inner();
+    if id == "old" {
         let yesterday = chrono::Utc::now() - Duration::days(1);
         pool.execute(sqlx::query!(
             r#"delete from texts where created_at < $1"#,

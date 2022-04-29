@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>PBKDF2</title>
+</head>
+<body>
+  <h1>PBKDF2 Calculator</h1>
+https://www.wi-fi.org/download.php?file=/sites/default/files/private/Wi-Fi_Easy_Connect_Specification_v2.0.pdf
+
+  <br>
+  rustのpbkdf2ライブラリはssidをbase64-url encodeする必要があるらしい．
+  <br>
+  base64とbase64-urlは別物なので注意する．
+  <br>
+  default値を使えば，
+  wpa_passphrase [ssid] [password] と一致するはず．
+
+  <p>
+    <form>
+      password:<br>
+      <input type="text" name="password" value="{{ password | default(value="sample-psk") }}" />
+      <br/>
+      <br/>
+
+      salt:<br>
+      <input type="text" name="salt" minlength=4 maxlength=64 value="{{ salt | default(value="sample-psk") }}" />
+      <br/>
+      <br/>
+
+      rounds:<br>
+      <input type="number" name="rounds" min=1 max=1000000 value={{ rounds | default(value=4096) }} />
+      rounds
+      (default=4096)
+      <br/>
+      <br/>
+
+      derived key length:<br>
+      <input type="number" name="dklen" min=1 max=16384 value={{dklen | default(value=32)}} />
+      bytes
+      (default=32)
+      <br/>
+      <br/>
+      <p><input type="submit"></p>
+    </form>
+  </p>
+  {% if value %}
+    <p>
+      <h2>Result</h2>
+      <pre>{{ value }}</pre>
+    </p>
+  {% endif %}
+</body>
+</html>
