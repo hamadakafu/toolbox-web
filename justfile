@@ -1,5 +1,12 @@
 deploy:
-  git push heroku master
+  # git push heroku master
+  flyctl deploy
+
+dev-setup:
+  # dockerを立て直すときにこれをやらないとsqlxのマクロが失敗する
+  pipx run docker-compose up -d
+  just sqlx-database-create
+  just sqlx-migrate-run
 
 sqlx-database-create:
   sqlx database create
